@@ -1,0 +1,79 @@
+﻿@model DisplayViewModel
+
+@{
+    ViewData["Title"] = "Vending Machine";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center my-3">
+            <h2>@ViewData["Title"]</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center my-3">
+            <div id="currentAmount">
+                <h3>Current Amount: <span id="balance">@Model.Balance</span> руб.</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center my-3">
+            <h3>Available Drinks:</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var drink in Model.Drinks)
+        {
+            <div class="col-md-4 my-3">
+                <div class="card">
+                    <img src="@drink.ImageUrl" class="card-img-top" alt="@drink.Name" width="200px" height="300px" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@drink.Name - @drink.Price руб.</h5>
+                        <p class="card-text">Available Quantity: <span id="quantity-@drink.Id">@drink.Quantity</span></p>
+                        <button id="drink-@drink.Id" onclick="purchaseDrink(@drink.Id)"
+                                data-price="@drink.Price" data-quantity="@drink.Quantity"
+                                class="btn btn-primary"
+                                disabled="@(drink.Price > Model.Balance || drink.Quantity <= 0)">
+                            Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center my-3">
+            <h3>Deposit Coins:</h3>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @foreach (var coin in Model.Coins)
+        {
+            <div class="col-md-2 my-3 text-center">
+                <button id="coin-@coin.Id" onclick="depositCoin(@coin.Id)" class="btn btn-secondary btn-block"
+                        disabled="@coin.IsBlocked">
+                    <img src="@coin.ImageUrl" class="mr-2" alt="coin" width="200px" height="200px" /> @coin.Value руб.
+                </button>
+            </div>
+        }
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 text-center my-3">
+            <button onclick="getChange()" class="btn btn-warning">Get Change</button>
+            <p id="changeResult"></p>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/drinkMachine.js"></script>
+}

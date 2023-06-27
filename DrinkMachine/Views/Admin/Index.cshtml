@@ -1,0 +1,96 @@
+﻿@model AdminViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Drinks Management</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="drinksList">
+
+                    @foreach (var drink in Model.Drinks)
+                    {
+                        <tr id="drink-@drink.Id">
+                            <td>@drink.Name</td>
+                            <td>@drink.Price</td>
+                            <td>@drink.Quantity</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="updateDrink(@drink.Id)">Update</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteDrink(@drink.Id)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h3>Add New Drink</h3>
+
+            <form id="addDrinkForm">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="drinkName" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+                    <input type="text" id="drinkPrice" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="text" id="drinkQuantity" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image URL</label>
+                    <input type="text" id="drinkImageUrl" class="form-control">
+                </div>
+                <input type="hidden" id="drinkId">
+
+                <button id="addDrinkButton" type="button" class="btn btn-primary" onclick="addDrink()">Add Drink</button>
+            </form>
+
+
+        </div>
+        <div class="col-lg-6">
+            <h2>Coins Management</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coin in Model.Coins)
+                    {
+                        <tr>
+                            <td>@coin.Value</td>
+                            <td>@(coin.IsBlocked ? "Blocked" : "Active")</td>
+                            <td>
+                                <button class="btn @(coin.IsBlocked ? "btn-success" : "btn-warning") btn-sm" onclick="toggleBlockCoin(@coin.Id)">
+                                    @(coin.IsBlocked ? "Unblock" : "Block")
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/js/admin.js"></script>
